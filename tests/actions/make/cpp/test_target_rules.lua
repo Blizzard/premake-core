@@ -21,7 +21,7 @@
 
 	local function prepare()
 		local cfg = test.getconfig(prj, "Debug")
-		make.cppAllRules(cfg)
+		make.cpp.allRules(cfg)
 	end
 
 
@@ -34,7 +34,7 @@
 		test.capture [[
 all: $(TARGETDIR) $(OBJDIR) prebuild prelink $(TARGET)
 	@:
-  		]]
+		]]
 	end
 
 
@@ -52,5 +52,5 @@ all: $(TARGETDIR) $(OBJDIR) prebuild prelink $(TARGET) $(dir $(TARGETDIR))PkgInf
 
 $(dir $(TARGETDIR))PkgInfo:
 $(dir $(TARGETDIR))Info.plist:
-  		]]
+		]]
 	end
