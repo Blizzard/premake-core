@@ -860,6 +860,11 @@
 	function m.projectReferences(prj)
 		local refs = project.getdependencies(prj, 'linkOnly')
 		if #refs > 0 then
+			-- sort dependencies by uuid.
+			table.sort(refs, function(a,b)
+				return a.uuid < b.uuid
+			end)
+
 			p.push('<ItemGroup>')
 			for _, ref in ipairs(refs) do
 				local relpath = vstudio.path(prj, vstudio.projectfile(ref))
@@ -919,8 +924,11 @@
 
 	function m.additionalUsingDirectories(cfg)
 		if #cfg.usingdirs > 0 then
-			local dirs = table.concat(vstudio.path(cfg, cfg.usingdirs), ";")
-			p.x('<AdditionalUsingDirectories>%s;%%(AdditionalUsingDirectories)</AdditionalUsingDirectories>', dirs)
+			local dirs = vstudio.path(cfg, cfg.usingdirs)
+			if #dirs > 0 then
+				table.sort(dirs)
+				p.x('<AdditionalUsingDirectories>%s;%%(AdditionalUsingDirectories)</AdditionalUsingDirectories>', table.concat(dirs, ";"))
+			end
 		end
 	end
 
@@ -1467,6 +1475,7 @@
 		dirs = table.filterempty(dirs)
 
 		if #dirs > 0 then
+			table.sort(dirs)
 			_x(2,'<ExecutablePath>%s;$(ExecutablePath)</ExecutablePath>', path.translate(table.concat(dirs, ";")))
 		end
 	end
@@ -1477,7 +1486,7 @@
 		if version then
 			version = "v" .. version
 		else
-			local action = premake.action.current()
+		local action = premake.action.current()
 			version = action.vstudio.platformToolset
 		end
 		if version then
@@ -1512,6 +1521,7 @@
 
 	function m.preprocessorDefinitions(cfg, defines, escapeQuotes, condition)
 		if #defines > 0 then
+			table.sort(defines)
 			defines = table.concat(defines, ";")
 			if escapeQuotes then
 				defines = defines:gsub('"', '\\"')
@@ -1524,6 +1534,7 @@
 
 	function m.undefinePreprocessorDefinitions(cfg, undefines, escapeQuotes, condition)
 		if #undefines > 0 then
+			table.sort(undefines)
 			undefines = table.concat(undefines, ";")
 			if escapeQuotes then
 				undefines = undefines:gsub('"', '\\"')
