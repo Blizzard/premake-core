@@ -22,7 +22,7 @@ Patch contributors:
     * Visual Studio 2015 support
     * runtime()
     * verbosef()
-  Mark Chandler <https://bitbucket.org/mchandler_blizzard>
+  Mark Chandler <mchandler@blizzard.com>
     * Prevent self-linking
   Mihai Sebea <http://twitter.com/mihai_sebea>
     * Xcode exporter fixes and improvements
