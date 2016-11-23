@@ -503,6 +503,8 @@
 			"WPF",
 			"C++11",
 			"C++14",
+			"C90",
+			"C99",
 		},
 		aliases = {
 			FatalWarnings = { "FatalWarnings", "FatalCompileWarnings", "FatalLinkWarnings" },
@@ -699,6 +701,12 @@
 		scope = "config",
 		kind = "list:directory",
 		tokens = true,
+	}
+
+	api.register {
+		name = "linkbuildoutputs",
+		scope = "config",
+		kind = "boolean"
 	}
 
 	api.register {
@@ -1495,5 +1503,8 @@
 
 	filter { "kind:SharedLib", "system:not Windows" }
 		pic "On"
+
+	filter { "system:macosx" }
+		toolset "clang"
 
 	filter {}

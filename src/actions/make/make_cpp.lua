@@ -221,6 +221,13 @@
 		-- add file to the fileset.
 		local filesets = cfg.project._gmake.filesets
 		local kind     = filesets[path.getextension(filename):lower()]
+
+		-- don't link generated object files automatically if it's explicitly
+		-- disabled.
+		if kind and path.isobjectfile(filename) and source.linkbuildoutputs == false then
+			kind = "CUSTOM"
+		end
+
 		if kind then
 			local fileset = cfg._gmake.filesets[kind] or {}
 			table.insert(fileset, filename)
@@ -417,8 +424,8 @@
 
 
 	function cpp.cxxFlags(cfg, toolset)
-		local flags = make.list(toolset.getcxxflags(cfg))
-		p.outln('ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)' .. flags)
+		local flags = make.list(table.join(toolset.getcxxflags(cfg), cfg.buildoptions))
+		p.outln('ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS)' .. flags)
 	end
 
 
