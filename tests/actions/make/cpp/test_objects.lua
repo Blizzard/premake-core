@@ -116,6 +116,37 @@ OBJECTS += $(OBJDIR)/hello1.o
 
 
 --
+-- If there's a custom rule for a non-C++ file extension, make sure that those
+-- files are included in the build.
+--
+
+	function suite.customBuildCommand_onCustomFileType()
+		files { "hello.lua" }
+		filter "files:**.lua"
+			buildmessage "Compiling %{file.name}"
+			buildcommands {
+				'luac "%{file.path}" -o "%{cfg.objdir}/%{file.basename}.luac"',
+			}
+			buildoutputs { "%{cfg.objdir}/%{file.basename}.luac" }
+		prepare()
+		test.capture [[
+# File sets
+# #############################################
+
+CUSTOM :=
+
+ifeq ($(config),debug)
+CUSTOM += obj/Debug/hello.luac
+endif
+
+ifeq ($(config),release)
+CUSTOM += obj/Release/hello.luac
+endif
+		]]
+	end
+
+
+--
 -- If a custom rule builds to an object file, include it in the
 -- link automatically to match the behavior of Visual Studio
 --
