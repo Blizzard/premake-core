@@ -164,18 +164,18 @@ endif
 			linkbuildoutputs "On"
 		prepare()
 		test.capture [[
-OBJECTS := \
+# File sets
+# #############################################
 
-RESOURCES := \
-
-CUSTOMFILES := \
+OBJECTS :=
 
 ifeq ($(config),debug)
-  OBJECTS += \
-	obj/Debug/hello.obj \
-
+OBJECTS += obj/Debug/hello.obj
 endif
 
+ifeq ($(config),release)
+OBJECTS += obj/Release/hello.obj
+endif
 		]]
 	end
 
@@ -197,18 +197,18 @@ endif
 			linkbuildoutputs "Off"
 		prepare()
 		test.capture [[
-OBJECTS := \
+# File sets
+# #############################################
 
-RESOURCES := \
-
-CUSTOMFILES := \
+CUSTOM :=
 
 ifeq ($(config),debug)
-  CUSTOMFILES += \
-	obj/Debug/hello.obj \
-
+CUSTOM += obj/Debug/hello.obj
 endif
 
+ifeq ($(config),release)
+CUSTOM += obj/Release/hello.obj
+endif
 		]]
 	end
 
