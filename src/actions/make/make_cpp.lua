@@ -220,19 +220,17 @@
 
 		-- add file to the fileset.
 		local filesets = cfg.project._gmake.filesets
-		local kind     = filesets[path.getextension(filename):lower()]
+		local kind     = filesets[path.getextension(filename):lower()] or "CUSTOM"
 
 		-- don't link generated object files automatically if it's explicitly
 		-- disabled.
-		if kind and path.isobjectfile(filename) and source.linkbuildoutputs == false then
+		if path.isobjectfile(filename) and source.linkbuildoutputs == false then
 			kind = "CUSTOM"
 		end
 
-		if kind then
-			local fileset = cfg._gmake.filesets[kind] or {}
-			table.insert(fileset, filename)
-			cfg._gmake.filesets[kind] = fileset
-		end
+		local fileset = cfg._gmake.filesets[kind] or {}
+		table.insert(fileset, filename)
+		cfg._gmake.filesets[kind] = fileset
 
 		-- recursively setup rules.
 		cpp.addRuleFile(cfg, node)
