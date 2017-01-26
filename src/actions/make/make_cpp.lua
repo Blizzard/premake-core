@@ -742,7 +742,7 @@
 	function cpp.outputFileRules(cfg, file)
 		local outputs = table.concat(file.buildoutputs, ' ')
 
-		local dependencies = file.source
+		local dependencies = p.esc(file.source)
 		if file.buildinputs and #file.buildinputs > 0 then
 			dependencies = dependencies .. " " .. table.concat(p.esc(file.buildinputs), " ")
 		end
